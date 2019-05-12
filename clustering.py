@@ -1,5 +1,10 @@
 import numpy as np 
 import matplotlib.pyplot as plt
+#el algoritmo fue creado para resolver un total de 2 features
+#porlo que se usara el algoritmo KMeans de la libreria sklearn para evaluar la inertia
+#para distintos numeros de clusters
+from sklearn.cluster import KMeans as sk_Kmeans
+
 
 class KMeans:
     def __init__(self, k,puntos):
@@ -15,7 +20,7 @@ class KMeans:
         #luego hacemos que el punto 0 pertenezca a el cluster 0 representado por el mismo
         self.puntos[0][2]=0
         self.N=len(puntos)
-        self.applyNIterations(5)
+        self.applyNIterations(10)
 
 
     def EuclidianDistance(self,x1,y1,x2,y2):
@@ -66,11 +71,9 @@ class KMeans:
 
     def applyNIterations(self,iterations):
         for i in range(iterations):
-            self.calculateInertia()
+            #self.calculateInertia()
             self.selectClusters()
             self.updateCentroids()
-            self.printData()
-            #self.printCentroids()
 
     def plotData(self):
         x0=[]
@@ -98,10 +101,33 @@ class KMeans:
             distance=self.EuclidianDistance(self.puntos[i][0],self.puntos[i][1],self.centroids[centroid][0],self.centroids[centroid][1])
             suma+=distance**2
         print("Inertia: "+str(suma))
+        return suma
+        
+def elbowPlot(data,maxKClusters):
+    inertias=list()
+    for i in range(1,maxKClusters+1):
+        myCluster=sk_Kmeans(n_clusters=i)
+        myCluster.fit(data)
+        
+        #myCluster=KMeans(i,data)
+        
+        inertias.append(myCluster.inertia_)
+        
+    plt.figure() 
+    x=[i for i in range(1,maxKClusters+1)]
+    y=[i for i in inertias]
+    plt.plot(x,y, 'ro-', markersize=8, lw=2)
+    plt.grid(True)
+    plt.xlabel('Number of Clusters')
+    plt.ylabel('Inertia')
+    plt.show()
+    
 
 if __name__ == "__main__":
     data=data=np.loadtxt("cluster_k2.txt",dtype=float,delimiter=";")
     clustering=KMeans(2,data)
     clustering.plotData()
-    
-    
+    #generamos el grafico de codo para hasta 10 clusters
+    #ahi se puede ver que despues de 2 clusters la variabilidad entre las inercias 
+    #es muy minima
+    elbowPlot(data,10)
