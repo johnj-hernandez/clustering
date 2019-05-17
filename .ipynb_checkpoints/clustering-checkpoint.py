@@ -1,8 +1,8 @@
 import numpy as np 
 import matplotlib.pyplot as plt
 #el algoritmo fue creado para resolver un total de 2 features
-#por lo que se usara el algoritmo KMeans de la libreria sklearn para evaluar la inertia
-#para distintos numeros de clusters y realizar la implementacion del elbow plot
+#porlo que se usara el algoritmo KMeans de la libreria sklearn para evaluar la inertia
+#para distintos numeros de clusters
 from sklearn.cluster import KMeans as sk_Kmeans
 
 
